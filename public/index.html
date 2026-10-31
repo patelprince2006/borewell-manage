@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Borewell Water Hisab | બોરવેલ પાણી હિસાબ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/print.css" media="print">
+  <script src="js/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-wrapper" id="brand-home-link">
+        <div class="brand-icon">💧</div>
+        <div class="brand-text">
+          <h1 data-i18n="app_title">બોરવેલ પાણી હિસાબ</h1>
+          <p data-i18n="app_subtitle">ખેડૂતોના પાણીના કલાક અને બિલ ગણતરીની સરળ સિસ્ટમ</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="lang-toggle-btn" class="lang-btn" type="button">
+          🌐 <span id="lang-btn-text">English માં જુઓ</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+
+    <!-- Top Summary Bar -->
+    <section class="summary-bar" id="top-summary-bar">
+      <div class="summary-card">
+        <div class="summary-icon">👨‍🌾</div>
+        <div class="summary-info">
+          <h4 data-i18n="total_farmers">કુલ ખેડૂતો</h4>
+          <div class="val" id="sum-total-farmers">0</div>
+        </div>
+      </div>
+      <div class="summary-card highlight">
+        <div class="summary-icon">💧</div>
+        <div class="summary-info">
+          <h4 data-i18n="today_water">કુલ પાણી સપ્લાય</h4>
+          <div class="val" id="sum-today-hours">0.00 કલાક</div>
+        </div>
+      </div>
+      <div class="summary-card highlight">
+        <div class="summary-icon">🧾</div>
+        <div class="summary-info">
+          <h4 data-i18n="today_bill">કુલ બિલ રકમ</h4>
+          <div class="val" id="sum-today-bill">₹0.00</div>
+        </div>
+      </div>
+      <div class="summary-card pending">
+        <div class="summary-icon">💰</div>
+        <div class="summary-info">
+          <h4 data-i18n="total_pending">કુલ બાકી રકમ</h4>
+          <div class="val" id="sum-total-pending">₹0.00</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Back to Home Bar (Visible when not on home) -->
+    <div class="nav-back-bar" id="nav-back-bar" style="display: none;">
+      <button class="btn-back" id="btn-back-home" type="button">
+        <span data-i18n="back_home">← મુખ્ય પાનું (Home)</span>
+      </button>
+      <div id="section-current-title" style="font-weight: 800; color: var(--primary-dark); font-size: 18px;"></div>
+    </div>
+
+    <!-- VIEW 0: HOME PAGE (4 Large Buttons) -->
+    <section class="view-section active" id="view-home">
+      <h3 class="home-menu-title" data-i18n="app_subtitle">ખેડૂતોના પાણીના કલાક અને બિલ ગણતરીની સરળ સિસ્ટમ</h3>
+      
+      <!-- 4 Primary Big Buttons -->
+      <div class="four-buttons-grid">
+        <div class="big-btn-card" id="home-card-farmers" role="button" tabindex="0">
+          <div class="btn-emoji">👨‍🌾</div>
+          <h2 data-i18n="btn_farmers">૧. ખેડૂતની માહિતી</h2>
+          <p data-i18n="btn_farmers_sub">ખેડૂત ઉમેરો, વિગતો જુઓ અને સુધારો</p>
+        </div>
+
+        <div class="big-btn-card" id="home-card-water" role="button" tabindex="0">
+          <div class="btn-emoji">💧</div>
+          <h2 data-i18n="btn_water">૨. પાણીની નોંધ</h2>
+          <p data-i18n="btn_water_sub">તારીખ, શરૂ/અંત સમય અને કલાક દાખલ કરો</p>
+        </div>
+
+        <div class="big-btn-card" id="home-card-bill" role="button" tabindex="0">
+          <div class="btn-emoji">🧾</div>
+          <h2 data-i18n="btn_bill">૩. બિલ ગણતરી</h2>
+          <p data-i18n="btn_bill_sub">ખેડૂતનું બિલ જુઓ, પ્રિન્ટ કરો અને PDF ડાઉનલોડ કરો</p>
+        </div>
+
+        <div class="big-btn-card" id="home-card-all-hisab" role="button" tabindex="0">
+          <div class="btn-emoji">📋</div>
+          <h2 data-i18n="btn_all_hisab">૪. બધા ખેડૂતોનો હિસાબ</h2>
+          <p data-i18n="btn_all_hisab_sub">સમગ્ર ખાતાવહી, કુલ કલાક અને બાકી રકમ</p>
+        </div>
+      </div>
+
+      <!-- Secondary Shortcuts -->
+      <div class="secondary-menu">
+        <div class="sec-btn-card" id="home-card-payment" role="button" tabindex="0">
+          <div class="sec-emoji">💰</div>
+          <div>
+            <h3 data-i18n="btn_payment">ચૂકવણી / જમા રકમ</h3>
+            <p data-i18n="btn_payment_sub">જમા થયેલા પૈસાની નોંધ કરો (રોકડ / UPI)</p>
+          </div>
+        </div>
+
+        <div class="sec-btn-card" id="home-card-crops" role="button" tabindex="0">
+          <div class="sec-emoji">🌾</div>
+          <div>
+            <h3 data-i18n="btn_crops">પાક અને ભાવ મેનેજમેન્ટ</h3>
+            <p data-i18n="btn_crops_sub">કલાક દીઠ દર અને પાકના નામ સેટ કરો</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 1: FARMER DETAILS (ખેડૂતની માહિતી) -->
+    <section class="view-section" id="view-farmers">
+      <div class="content-card">
+        <div class="card-header">
+          <h2>👨‍🌾 <span data-i18n="farmer_form_title">નવા ખેડૂતની માહિતી ઉમેરો</span></h2>
+        </div>
+        <form id="form-add-farmer">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="farmer-name"><span data-i18n="farmer_name">ખેડૂતનું પૂરું નામ</span> *</label>
+              <input type="text" id="farmer-name" required placeholder="દા.ત. રમેશભાઈ પટેલ">
+            </div>
+
+            <div class="form-group">
+              <label for="farmer-mobile"><span data-i18n="farmer_mobile">મોબાઈલ નંબર</span></label>
+              <input type="tel" id="farmer-mobile" placeholder="૧૦ આંકડાનો મોબાઈલ નંબર">
+            </div>
+
+            <div class="form-group">
+              <label for="farmer-village"><span data-i18n="village_name">ગામનું નામ</span></label>
+              <input type="text" id="farmer-village" placeholder="દા.ત. પીપરડી">
+            </div>
+
+            <div class="form-group">
+              <label for="farmer-crop"><span data-i18n="crop_name">પાકનું નામ (ફસલ)</span></label>
+              <input type="text" id="farmer-crop" placeholder="દા.ત. કપાસ, ઘઉં, મગફળી">
+            </div>
+
+            <div class="form-group full-width">
+              <label for="farmer-farm-id"><span data-i18n="farm_identifier">ખેતરનું નામ અથવા ખાતા/સર્વે નંબર</span></label>
+              <input type="text" id="farmer-farm-id" placeholder="દા.ત. ખાતા નં. ૪૨ / વાડીવાળું ખેતર">
+            </div>
+          </div>
+
+          <div class="btn-group-row">
+            <button type="submit" class="btn-primary" id="btn-submit-farmer">
+              <span data-i18n="btn_save_farmer">💾 ખેડૂત સાચવો (Save Farmer)</span>
+            </button>
+            <button type="reset" class="btn-secondary">
+              <span data-i18n="cancel">રદ કરો</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Farmers List Table -->
+      <div class="content-card">
+        <div class="card-header">
+          <h2>📋 <span data-i18n="all_farmers_list">નોંધાયેલા ખેડૂતોની યાદી</span></h2>
+        </div>
+
+        <div class="filter-bar">
+          <div class="search-input-wrapper">
+            <input type="text" id="search-farmers-input" placeholder="ખેડૂત, ગામ કે મોબાઈલથી શોધો...">
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="app-table" id="table-farmers">
+            <thead>
+              <tr>
+                <th data-i18n="sr_no">#</th>
+                <th data-i18n="col_farmer">ખેડૂતનું નામ</th>
+                <th data-i18n="village_name">ગામ</th>
+                <th data-i18n="farmer_mobile">મોબાઈલ</th>
+                <th data-i18n="crop_name">પાક</th>
+                <th data-i18n="farm_identifier">ખેતર / ખાતા નં.</th>
+                <th data-i18n="col_remaining">બાકી પૈસા (₹)</th>
+                <th data-i18n="action">ક્રિયા</th>
+              </tr>
+            </thead>
+            <tbody id="table-farmers-body">
+              <tr><td colspan="8" style="text-align:center;" data-i18n="loading">માહિતી લોડ થઈ રહી છે...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: WATER SUPPLY ENTRY (પાણીની નોંધ) -->
+    <section class="view-section" id="view-water">
+      <div class="content-card">
+        <div class="card-header">
+          <h2>💧 <span data-i18n="water_entry_title">પાણી સપ્લાયની નવી નોંધ દાખલ કરો</span></h2>
+        </div>
+
+        <form id="form-water-entry">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="water-farmer-select"><span data-i18n="select_farmer">ખેડૂત પસંદ કરો</span> *</label>
+              <select id="water-farmer-select" required>
+                <option value="" data-i18n="select_farmer_ph">-- ખેડૂત પસંદ કરો --</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="water-crop-select"><span data-i18n="select_crop">પાક પસંદ કરો</span> *</label>
+              <select id="water-crop-select" required>
+                <!-- Populated via JS -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="water-entry-date"><span data-i18n="select_date">તારીખ પસંદ કરો</span> *</label>
+              <input type="date" id="water-entry-date" required>
+            </div>
+
+            <div class="form-group">
+              <label for="water-start-time"><span data-i18n="start_time">પાણી શરૂ કરવાનો સમય</span> *</label>
+              <input type="time" id="water-start-time" value="06:00" required>
+            </div>
+
+            <div class="form-group">
+              <label for="water-end-time"><span data-i18n="end_time">પાણી બંધ કરવાનો સમય</span> *</label>
+              <input type="time" id="water-end-time" value="09:00" required>
+            </div>
+
+            <div class="form-group">
+              <label for="water-hourly-rate"><span data-i18n="hourly_rate">કલાક દીઠ ભાવ (₹)</span> *</label>
+              <input type="number" id="water-hourly-rate" min="0" step="1" value="200" required>
+            </div>
+
+            <!-- Live Automatic Calculation Display -->
+            <div class="calc-result-banner" id="water-calc-banner">
+              <div class="calc-item">
+                <span data-i18n="total_time">કુલ પાણીનો સમય (પાણીના કલાક)</span>
+                <strong id="calc-display-hours">3.00 કલાક (3 કલાક 00 મિનિટ)</strong>
+              </div>
+              <div class="calc-item" style="font-size: 28px; color: var(--primary);">✖</div>
+              <div class="calc-item">
+                <span data-i18n="hourly_rate">કલાક દીઠ ભાવ</span>
+                <strong id="calc-display-rate">₹200.00</strong>
+              </div>
+              <div class="calc-item" style="font-size: 28px; color: var(--primary);">=</div>
+              <div class="calc-item">
+                <span data-i18n="total_amount">કુલ બિલ રકમ (₹)</span>
+                <strong id="calc-display-total" style="color: #1b5e20;">₹600.00</strong>
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="water-notes"><span data-i18n="notes">ખાસ નોંધ (વૈકલ્પિક)</span></label>
+              <input type="text" id="water-notes" placeholder="દા.ત. સવારનો વારો, દવા છાંટવા માટે પાણી">
+            </div>
+          </div>
+
+          <div class="btn-group-row">
+            <button type="submit" class="btn-primary" id="btn-save-water-entry">
+              <span data-i18n="btn_save_water">💧 પાણીની નોંધ સાચવો (Save Entry)</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Recent Water Entries Table -->
+      <div class="content-card">
+        <div class="card-header">
+          <h2>🕒 <span data-i18n="recent_water_entries">તાજેતરની પાણી સપ્લાય નોંધણીઓ</span></h2>
+        </div>
+        <div class="table-responsive">
+          <table class="app-table" id="table-water-entries">
+            <thead>
+              <tr>
+                <th data-i18n="select_date">તારીખ</th>
+                <th data-i18n="col_farmer">ખેડૂત</th>
+                <th data-i18n="col_crop">પાક</th>
+                <th data-i18n="start_time">શરૂ</th>
+                <th data-i18n="end_time">અંત</th>
+                <th data-i18n="col_hours">કલાક</th>
+                <th data-i18n="hourly_rate">ભાવ (₹)</th>
+                <th data-i18n="col_bill">કુલ રકમ (₹)</th>
+                <th data-i18n="action">ક્રિયા</th>
+              </tr>
+            </thead>
+            <tbody id="table-water-entries-body">
+              <tr><td colspan="9" style="text-align:center;" data-i18n="loading">માહિતી લોડ થઈ રહી છે...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: SIMPLE BILL CALCULATION (બિલ ગણતરી) -->
+    <section class="view-section" id="view-bill">
+      <div class="content-card">
+        <div class="card-header">
+          <h2>🧾 <span data-i18n="bill_calc_title">ખેડૂતનું બિલ ગણતરી</span></h2>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="bill-farmer-select"><span data-i18n="select_farmer">ખેડૂત પસંદ કરો</span> *</label>
+            <select id="bill-farmer-select">
+              <option value="" data-i18n="select_farmer_ph">-- ખેડૂત પસંદ કરો --</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="bill-start-date"><span data-i18n="start_date">શરૂઆતની તારીખ</span></label>
+            <input type="date" id="bill-start-date">
+          </div>
+
+          <div class="form-group">
+            <label for="bill-end-date"><span data-i18n="end_date">અંતિમ તારીખ</span></label>
+            <input type="date" id="bill-end-date">
+          </div>
+        </div>
+
+        <div class="btn-group-row">
+          <button type="button" class="btn-secondary" id="btn-bill-preset-all">બધો સમય (All Time)</button>
+          <button type="button" class="btn-secondary" id="btn-bill-preset-month">આ મહિનો (This Month)</button>
+          <button type="button" class="btn-primary" id="btn-load-farmer-bill">
+            <span data-i18n="btn_calc_bill">🧾 બિલ બનાવો (Generate Bill)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bill Output Card -->
+      <div class="content-card" id="bill-output-container" style="display: none;">
+        <div class="card-header">
+          <h2>📄 <span data-i18n="farmer_bill_summary">બિલની વિગતવાર માહિતી</span></h2>
+          <span class="badge" id="bill-status-badge">Pending</span>
+        </div>
+
+        <div class="bill-summary-box">
+          <table class="bill-table-simple">
+            <thead>
+              <tr>
+                <th data-i18n="details_label">વિગત</th>
+                <th data-i18n="amount_label">રકમ / માપ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-i18n="col_farmer">ખેડૂતનું નામ (Farmer Name)</td>
+                <td id="bill-disp-name">-</td>
+              </tr>
+              <tr>
+                <td data-i18n="village_name">ગામ (Village)</td>
+                <td id="bill-disp-village">-</td>
+              </tr>
+              <tr>
+                <td data-i18n="col_crop">પાક (Crop)</td>
+                <td id="bill-disp-crop">-</td>
+              </tr>
+              <tr>
+                <td>પાણીના કલાક (Total Water Supply)</td>
+                <td id="bill-disp-hours">0 hours</td>
+              </tr>
+              <tr>
+                <td>કલાક દીઠ ભાવ (Price Per Hour)</td>
+                <td id="bill-disp-rate">₹0</td>
+              </tr>
+              <tr class="highlight-row">
+                <td>કુલ બિલ (Total Bill - Kul Bill)</td>
+                <td id="bill-disp-total">₹0.00</td>
+              </tr>
+              <tr>
+                <td>જમા રકમ (Amount Paid)</td>
+                <td id="bill-disp-paid" style="color: #2e7d32;">₹0.00</td>
+              </tr>
+              <tr class="pending-row">
+                <td>બાકી પૈસા (Remaining Amount - Baki Paisa)</td>
+                <td id="bill-disp-remaining">₹0.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 3 Large Buttons -->
+        <div class="bill-actions-grid">
+          <button class="btn-large-action btn-view" id="btn-bill-action-view" type="button">
+            <span data-i18n="btn_view_bill">👁️ બિલ જુઓ (View Bill)</span>
+          </button>
+          <button class="btn-large-action btn-download" id="btn-bill-action-download" type="button">
+            <span data-i18n="btn_download_pdf">📥 PDF ડાઉનલોડ કરો (Download PDF)</span>
+          </button>
+          <button class="btn-large-action btn-print" id="btn-bill-action-print" type="button">
+            <span data-i18n="btn_print_bill">🖨️ બિલ પ્રિન્ટ કરો (Print Bill)</span>
+          </button>
+        </div>
+
+        <!-- Date-wise Breakdown -->
+        <div style="margin-top: 30px;">
+          <h3 style="margin-bottom: 12px; color: var(--primary-dark);" data-i18n="datewise_breakdown">તારીખ મુજબ પાણી વપરાશની વિગતો</h3>
+          <div class="table-responsive">
+            <table class="app-table" id="table-bill-sessions">
+              <thead>
+                <tr>
+                  <th data-i18n="select_date">તારીખ</th>
+                  <th data-i18n="col_crop">પાક</th>
+                  <th data-i18n="start_time">શરૂ</th>
+                  <th data-i18n="end_time">અંત</th>
+                  <th data-i18n="col_hours">કલાક</th>
+                  <th data-i18n="hourly_rate">દર (₹)</th>
+                  <th data-i18n="col_bill">રકમ (₹)</th>
+                </tr>
+              </thead>
+              <tbody id="table-bill-sessions-body">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: ALL FARMERS' HISAB (બધા ખેડૂતોનો હિસાબ) -->
+    <section class="view-section" id="view-all-hisab">
+      <div class="content-card">
+        <div class="card-header">
+          <h2>📋 <span data-i18n="all_hisab_title">બધા ખેડૂતોનો સંપૂર્ણ હિસાબ (All Farmers' Hisab)</span></h2>
+          <div class="btn-group-row" style="margin-top: 0;">
+            <button class="btn-secondary" id="btn-all-hisab-print" type="button">
+              <span data-i18n="btn_print_report">🖨️ રિપોર્ટ પ્રિન્ટ કરો</span>
+            </button>
+            <button class="btn-primary" id="btn-all-hisab-download" type="button">
+              <span data-i18n="btn_download_report">📥 એક્સેલ/CSV ડાઉનલોડ</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="filter-bar">
+          <div class="search-input-wrapper">
+            <input type="text" id="hisab-search-input" placeholder="ખેડૂત અથવા ગામનું નામ શોધો...">
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <label style="font-weight: 700; font-size: 14px;" data-i18n="start_date">તારીખથી:</label>
+              <input type="date" id="hisab-filter-start" style="padding: 10px; border-radius: 6px; border: 2px solid #cbd5e1;">
+            </div>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <label style="font-weight: 700; font-size: 14px;" data-i18n="end_date">તારીખ સુધી:</label>
+              <input type="date" id="hisab-filter-end" style="padding: 10px; border-radius: 6px; border: 2px solid #cbd5e1;">
+            </div>
+            <button class="btn-primary" id="btn-hisab-filter-apply" type="button">શોધો</button>
+            <button class="btn-secondary" id="btn-hisab-filter-today" type="button">આજ (Today)</button>
+            <button class="btn-secondary" id="btn-hisab-filter-month" type="button">આ મહિનો</button>
+            <button class="btn-secondary" id="btn-hisab-filter-clear" type="button">બધો હિસાબ (Reset)</button>
+          </div>
+        </div>
+
+        <div id="hisab-date-badge-container" style="display: none; margin-bottom: 14px; padding: 10px 14px; background: #e8f5e9; border: 1.5px solid #a5d6a7; border-radius: 6px; color: #1b5e20; font-weight: 700; font-size: 14px; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <span id="hisab-active-period-text">📅 સમયગાળો: બધા રેકોર્ડ</span>
+          <label style="font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; margin: 0; color: #1b5e20;">
+            <input type="checkbox" id="hisab-filter-active-only" checked> માત્ર સક્રિય ખેડૂતો દર્શાવો (Active Only)
+          </label>
+        </div>
+
+        <div class="table-responsive">
+          <table class="app-table" id="table-all-hisab">
+            <thead>
+              <tr>
+                <th data-i18n="col_farmer">ખેડૂતનું નામ</th>
+                <th data-i18n="village_name">ગામ</th>
+                <th data-i18n="col_crop">પાક</th>
+                <th data-i18n="col_hours" style="text-align: right;">કુલ કલાક</th>
+                <th data-i18n="col_bill" style="text-align: right;">કુલ બિલ</th>
+                <th data-i18n="col_paid" style="text-align: right;">જમા (Paid)</th>
+                <th data-i18n="col_remaining" style="text-align: right;">બાકી પૈસા</th>
+                <th data-i18n="col_status">સ્થિતિ</th>
+                <th data-i18n="action">ક્રિયા</th>
+              </tr>
+            </thead>
+            <tbody id="table-all-hisab-body">
+              <tr><td colspan="9" style="text-align:center;" data-i18n="loading">માહિતી લોડ થઈ રહી છે...</td></tr>
+            </tbody>
+            <tfoot>
+              <tr id="table-all-hisab-footer">
+                <th colspan="3" data-i18n="grand_total">કુલ સરવાળો (Grand Total)</th>
+                <th id="grand-total-hours" style="text-align: right;">0.00</th>
+                <th id="grand-total-bill" style="text-align: right;">₹0.00</th>
+                <th id="grand-total-paid" style="text-align: right;">₹0.00</th>
+                <th id="grand-total-remaining" style="text-align: right; color: #b71c1c;">₹0.00</th>
+                <th colspan="2"></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 5: PAYMENT ENTRY (ચૂકવણી / જમા) -->
+    <section class="view-section" id="view-payments">
+      <div class="content-card">
+        <div class="card-header">
+          <h2>💰 <span data-i18n="payment_title">ખેડૂત પાસેથી જમા થયેલ રકમ (Payment Entry)</span></h2>
+        </div>
+
+        <form id="form-payment-entry">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="payment-farmer-select"><span data-i18n="select_farmer">ખેડૂત પસંદ કરો</span> *</label>
+              <select id="payment-farmer-select" required>
+                <option value="" data-i18n="select_farmer_ph">-- ખેડૂત પસંદ કરો --</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label><span data-i18n="remaining_balance_label">હાલની બાકી રકમ (Baki Paisa)</span></label>
+              <input type="text" id="payment-current-balance" readonly value="₹0.00" style="color: #c62828;">
+            </div>
+
+            <div class="form-group">
+              <label for="payment-amount"><span data-i18n="enter_amount">જમા રકમ (₹)</span> *</label>
+              <input type="number" id="payment-amount" min="1" step="1" required placeholder="દા.ત. 1000">
+            </div>
+
+            <div class="form-group">
+              <label for="payment-date"><span data-i18n="payment_date">ચૂકવણીની તારીખ</span> *</label>
+              <input type="date" id="payment-date" required>
+            </div>
+
+            <div class="form-group">
+              <label for="payment-method"><span data-i18n="payment_method">ચૂકવણી પદ્ધતિ</span> *</label>
+              <select id="payment-method" required>
+                <option value="Cash" data-i18n="method_cash">રોકડ (Cash)</option>
+                <option value="UPI" data-i18n="method_upi">UPI (Google Pay / PhonePe / Paytm)</option>
+                <option value="Other" data-i18n="method_other">અન્ય (Other / ચેક)</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="payment-notes"><span data-i18n="notes">ખાસ નોંધ (વૈકલ્પિક)</span></label>
+              <input type="text" id="payment-notes" placeholder="દા.ત. અડધી રકમ જમા, બાકી 15 દિવસ પછી">
+            </div>
+          </div>
+
+          <div class="btn-group-row">
+            <button type="submit" class="btn-primary" id="btn-save-payment">
+              <span data-i18n="btn_save_payment">💰 રકમ જમા કરો (Save Payment)</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Recent Payments Table -->
+      <div class="content-card">
+        <div class="card-header">
+          <h2>🧾 <span data-i18n="recent_payments">છેલ્લી ચૂકવણીઓ</span></h2>
+          <div class="btn-group-row" style="margin-top: 0; gap: 8px;">
+            <button class="btn-secondary" id="btn-payments-pdf" type="button">
+              <span data-i18n="btn_payments_pdf">📄 PDF ડાઉનલોડ કરો</span>
+            </button>
+            <button class="btn-primary" id="btn-payments-csv" type="button">
+              <span data-i18n="btn_payments_csv">📥 એક્સેલ/CSV ડાઉનલોડ</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter bar for payments -->
+        <div class="filter-bar">
+          <div class="search-input-wrapper">
+            <input type="text" id="payments-search-input" placeholder="ખેડૂતનું નામ અથવા પદ્ધતિથી શોધો...">
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <label style="font-weight: 700; font-size: 14px;" data-i18n="start_date">તારીખથી:</label>
+            <input type="date" id="payments-filter-start" style="padding: 10px; border-radius: 6px; border: 2px solid #cbd5e1;">
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <label style="font-weight: 700; font-size: 14px;" data-i18n="end_date">તારીખ સુધી:</label>
+            <input type="date" id="payments-filter-end" style="padding: 10px; border-radius: 6px; border: 2px solid #cbd5e1;">
+          </div>
+          <button class="btn-secondary" id="btn-payments-filter-apply" type="button">શોધો</button>
+          <button class="btn-secondary" id="btn-payments-filter-clear" type="button">રીસેટ</button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="app-table" id="table-payments">
+            <thead>
+              <tr>
+                <th data-i18n="payment_date">તારીખ</th>
+                <th data-i18n="col_farmer">ખેડૂત</th>
+                <th data-i18n="enter_amount">જમા રકમ (₹)</th>
+                <th data-i18n="payment_method">પદ્ધતિ</th>
+                <th data-i18n="notes">નોંધ</th>
+                <th data-i18n="action">ક્રિયા</th>
+              </tr>
+            </thead>
+            <tbody id="table-payments-body">
+              <tr><td colspan="6" style="text-align:center;" data-i18n="loading">માહિતી લોડ થઈ રહી છે...</td></tr>
+            </tbody>
+            <tfoot>
+              <tr style="background: #f1f5f9; font-weight: 800; border-top: 2px solid #94a3b8;">
+                <th colspan="2" style="text-align: right;" data-i18n="grand_total">કુલ જમા રકમ (Grand Total):</th>
+                <th id="payments-grand-total" style="color: #2e7d32; font-size: 16px;">₹0.00</th>
+                <th colspan="3"></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 6: CROPS & PRICING (પાક અને ભાવ) -->
+    <section class="view-section" id="view-crops">
+      <div class="content-card">
+        <div class="card-header">
+          <h2>🌾 <span data-i18n="crops_title">પાક અને કલાક દીઠ ભાવ મેનેજમેન્ટ</span></h2>
+        </div>
+
+        <form id="form-crop-entry">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="crop-name-en"><span data-i18n="crop_name_en">પાકનું નામ (English)</span> *</label>
+              <input type="text" id="crop-name-en" required placeholder="e.g. Cotton">
+            </div>
+            <div class="form-group">
+              <label for="crop-name-gu"><span data-i18n="crop_name_gu">પાકનું નામ (ગુજરાતી)</span> *</label>
+              <input type="text" id="crop-name-gu" required placeholder="દા.ત. કપાસ">
+            </div>
+            <div class="form-group">
+              <label for="crop-rate"><span data-i18n="hourly_rate">કલાક દીઠ ભાવ (₹)</span> *</label>
+              <input type="number" id="crop-rate" min="1" step="1" required placeholder="200">
+            </div>
+          </div>
+          <div class="btn-group-row">
+            <button type="submit" class="btn-primary">
+              <span data-i18n="btn_save_crop">પાક ઉમેરો / સુધારો</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="content-card">
+        <div class="card-header">
+          <h2>📋 હાલના પાકના દરો (Current Crop Rates)</h2>
+        </div>
+        <div class="table-responsive">
+          <table class="app-table" id="table-crops">
+            <thead>
+              <tr>
+                <th data-i18n="sr_no">#</th>
+                <th>પાકનું નામ (English)</th>
+                <th>પાકનું નામ (ગુજરાતી)</th>
+                <th data-i18n="hourly_rate">કલાક દીઠ ભાવ (₹)</th>
+                <th data-i18n="action">ક્રિયા</th>
+              </tr>
+            </thead>
+            <tbody id="table-crops-body">
+              <tr><td colspan="5" style="text-align:center;" data-i18n="loading">માહિતી લોડ થઈ રહી છે...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: INVOICE / PRINTABLE BILL -->
+  <div class="modal-overlay" id="modal-invoice">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>🧾 <span data-i18n="app_title">બોરવેલ પાણી હિસાબ</span> - બિલ પાવતી</h3>
+        <button class="modal-close" id="modal-invoice-close" type="button">&times;</button>
+      </div>
+
+      <div class="printable-invoice" id="printable-bill-content">
+        <div class="invoice-header">
+          <canvas id="inv-title-canvas" class="invoice-title-canvas" width="540" height="42"></canvas>
+          <h1 class="invoice-title-fallback">બોરવેલ પાણી સપ્લાય બિલ પાવતી</h1>
+          <p>Borewell Water Supply Invoice & Account Receipt</p>
+          <div class="invoice-date-badge">તારીખ: <span id="inv-current-date">-</span></div>
+        </div>
+
+        <div class="invoice-meta-grid">
+          <div>
+            <strong>ખેડૂતનું નામ:</strong> <span id="inv-farmer-name">-</span><br>
+            <strong>ગામ:</strong> <span id="inv-village">-</span><br>
+            <strong>મોબાઈલ:</strong> <span id="inv-mobile">-</span>
+          </div>
+          <div style="text-align: right;">
+            <strong>પાક:</strong> <span id="inv-crop">-</span>
+          </div>
+        </div>
+
+        <div class="invoice-table-wrapper">
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th>તારીખ</th>
+                <th>પાક</th>
+                <th class="text-center">સમય (શરૂ - અંત)</th>
+                <th class="text-right">કલાક</th>
+                <th class="text-right">ભાવ (₹)</th>
+                <th class="text-right">રકમ (₹)</th>
+              </tr>
+            </thead>
+            <tbody id="inv-sessions-body">
+            </tbody>
+          </table>
+        </div>
+
+        <div class="invoice-total-card">
+          <div class="invoice-total-row">
+            <span>કુલ પાણીના કલાક (Total Hours):</span>
+            <strong id="inv-total-hours">0.00 કલાક</strong>
+          </div>
+          <div class="invoice-total-row">
+            <span>કુલ બિલ રકમ (Kul Bill):</span>
+            <strong id="inv-total-bill">₹0.00</strong>
+          </div>
+          <div class="invoice-total-row highlight-paid">
+            <span>જમા થયેલ રકમ (Amount Paid):</span>
+            <strong id="inv-total-paid">₹0.00</strong>
+          </div>
+          <div class="invoice-due-box">
+            <span class="due-label">બાકી પૈસા (Baki Paisa):</span>
+            <strong class="due-amount" id="inv-total-remaining">₹0.00</strong>
+          </div>
+        </div>
+
+        <div class="invoice-footer-sign">
+          <div class="sign-line">ખેડૂતની સહી</div>
+          <div class="sign-line">બોરવેલ ઓપરેટરની સહી</div>
+        </div>
+      </div>
+
+      <div class="btn-group-row" style="justify-content: flex-end; margin-top: 20px; gap: 10px; flex-wrap: wrap;">
+        <button class="btn-secondary" id="btn-modal-close" type="button" data-i18n="close">બંધ કરો</button>
+        <button class="btn-secondary" id="btn-modal-print" type="button">
+          <span data-i18n="btn_print_bill_short">🖨️ બિલ પ્રિન્ટ કરો</span>
+        </button>
+        <button class="btn-primary" id="btn-modal-download" type="button">
+          <span data-i18n="btn_download_pdf">📥 PDF ડાઉનલોડ કરો (Download PDF)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: EDIT FARMER -->
+  <div class="modal-overlay" id="modal-edit-farmer">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>✏️ ખેડૂતની વિગતોમાં સુધારો કરો</h3>
+        <button class="modal-close" id="modal-edit-farmer-close" type="button">&times;</button>
+      </div>
+      <form id="form-edit-farmer">
+        <input type="hidden" id="edit-farmer-id">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="edit-farmer-name">ખેડૂતનું નામ *</label>
+            <input type="text" id="edit-farmer-name" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-farmer-mobile">મોબાઈલ નંબર</label>
+            <input type="tel" id="edit-farmer-mobile">
+          </div>
+          <div class="form-group">
+            <label for="edit-farmer-village">ગામનું નામ</label>
+            <input type="text" id="edit-farmer-village">
+          </div>
+          <div class="form-group">
+            <label for="edit-farmer-crop">મુખ્ય પાક</label>
+            <input type="text" id="edit-farmer-crop">
+          </div>
+          <div class="form-group full-width">
+            <label for="edit-farmer-farm-id">ખેતર / ખાતા નં.</label>
+            <input type="text" id="edit-farmer-farm-id">
+          </div>
+        </div>
+        <div class="btn-group-row" style="margin-top: 20px;">
+          <button type="submit" class="btn-primary" data-i18n="save_changes">ફેરફારો સાચવો</button>
+          <button type="button" class="btn-secondary" id="btn-cancel-edit-farmer" data-i18n="cancel">રદ કરો</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: PAYMENT RECEIPT (જમા રકમ પાવતી) -->
+  <div class="modal-overlay" id="modal-payment-receipt">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>🧾 <span data-i18n="payment_receipt_title">જમા રકમ પાવતી (Payment Receipt)</span></h3>
+        <button class="modal-close" id="modal-receipt-close" type="button">&times;</button>
+      </div>
+
+      <div class="printable-invoice" id="printable-receipt-content">
+        <div class="invoice-header">
+          <canvas id="receipt-title-canvas" class="invoice-title-canvas" width="540" height="42"></canvas>
+          <h1 class="invoice-title-fallback">બોરવેલ પાણી સપ્લાય - જમા રકમ પાવતી</h1>
+          <p>Borewell Water Supply Payment Receipt</p>
+          <div class="invoice-date-badge">પાવતી નં: <span id="rec-number">-</span> | તારીખ: <span id="rec-date">-</span></div>
+        </div>
+
+        <div class="invoice-meta-grid">
+          <div>
+            <strong>ખેડૂતનું નામ:</strong> <span id="rec-farmer-name">-</span><br>
+            <strong>ગામ:</strong> <span id="rec-farmer-village">-</span>
+          </div>
+          <div style="text-align: right;">
+            <strong>ચૂકવણી પદ્ધતિ:</strong> <span id="rec-payment-method">-</span><br>
+            <strong>નોંધ:</strong> <span id="rec-payment-notes">-</span>
+          </div>
+        </div>
+
+        <div class="invoice-total-card" style="margin: 18px 0; border: 2px solid #2e7d32; background: #f4fbf5;">
+          <div class="invoice-total-row highlight-paid" style="font-size: 16px; padding: 10px 0;">
+            <span style="font-weight: 700;">સ્વીકારેલ જમા રકમ (Amount Received):</span>
+            <strong id="rec-amount-paid" style="font-size: 22px; color: #1b5e20;">₹0.00</strong>
+          </div>
+          <div class="invoice-due-box" style="margin-top: 8px;">
+            <span class="due-label">હાલની બાકી રકમ (Remaining Balance):</span>
+            <strong class="due-amount" id="rec-remaining-balance">₹0.00</strong>
+          </div>
+        </div>
+
+        <div class="invoice-footer-sign">
+          <div class="sign-line">નાણાં આપનાર (ખેડૂતની સહી)</div>
+          <div class="sign-line">નાણાં સ્વીકારનાર (બોરવેલ સંચાલક)</div>
+        </div>
+      </div>
+
+      <div class="btn-group-row" style="justify-content: flex-end; margin-top: 20px; gap: 10px; flex-wrap: wrap;">
+        <button class="btn-secondary" id="btn-receipt-modal-close" type="button" data-i18n="close">બંધ કરો</button>
+        <button class="btn-secondary" id="btn-receipt-modal-print" type="button">
+          <span>🖨️ પાવતી પ્રિન્ટ કરો</span>
+        </button>
+        <button class="btn-primary" id="btn-receipt-modal-download" type="button">
+          <span data-i18n="btn_payments_pdf">📄 PDF ડાઉનલોડ કરો</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HIDDEN PRINTABLE CONTAINER FOR PAYMENTS REPORT PDF -->
+  <div id="printable-payments-report" style="position: absolute; left: -9999px; top: -9999px; width: 780px; background: #ffffff; padding: 24px; font-family: 'Anek Gujarati', sans-serif;">
+    <div style="text-align: center; border-bottom: 2px solid #1b5e20; padding-bottom: 12px; margin-bottom: 16px;">
+      <h2 style="font-size: 22px; color: #1b5e20; margin: 0 0 4px 0; font-weight: 700;">બોરવેલ પાણી સપ્લાય - જમા રકમ રિપોર્ટ</h2>
+      <p style="font-size: 13px; color: #555555; margin: 0 0 6px 0;">Borewell Water Supply - Payment Collection Report</p>
+      <div style="font-size: 12px; color: #1b5e20; font-weight: 700;">રિપોર્ટ તારીખ: <span id="pdf-report-date">-</span> | કુલ એન્ટ્રી: <span id="pdf-report-count">0</span></div>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 12px;">
+      <thead>
+        <tr style="background: #e8f5e9; color: #1b5e20; font-weight: 700;">
+          <th style="border: 1px solid #444; padding: 8px 10px; text-align: left;">તારીખ</th>
+          <th style="border: 1px solid #444; padding: 8px 10px; text-align: left;">ખેડૂતનું નામ</th>
+          <th style="border: 1px solid #444; padding: 8px 10px; text-align: left;">ગામ</th>
+          <th style="border: 1px solid #444; padding: 8px 10px; text-align: right;">જમા રકમ (₹)</th>
+          <th style="border: 1px solid #444; padding: 8px 10px; text-align: left;">પદ્ધતિ</th>
+          <th style="border: 1px solid #444; padding: 8px 10px; text-align: left;">નોંધ</th>
+        </tr>
+      </thead>
+      <tbody id="pdf-payments-report-body">
+      </tbody>
+      <tfoot>
+        <tr style="background: #e8f5e9; font-weight: 800; border-top: 2px solid #1b5e20;">
+          <th colspan="3" style="border: 1px solid #444; padding: 8px 10px; text-align: right;">કુલ જમા રકમ (Grand Total):</th>
+          <th id="pdf-payments-grand-total" style="border: 1px solid #444; padding: 8px 10px; text-align: right; color: #1b5e20;">₹0.00</th>
+          <th colspan="2" style="border: 1px solid #444;"></th>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 36px; padding: 0 20px;">
+      <div style="border-top: 1px solid #333; width: 180px; text-align: center; font-size: 12px; padding-top: 4px;">નાણાં મેળવનારની સહી</div>
+      <div style="border-top: 1px solid #333; width: 180px; text-align: center; font-size: 12px; padding-top: 4px;">બોરવેલ સંચાલકની સહી</div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>🌾 <strong>બોરવેલ પાણી હિસાબ (Borewell Water Hisab)</strong> — ખેડૂત મિત્રો માટે સરળ અને સચોટ હિસાબ સિસ્ટમ</p>
+    <p>Created for our farming community by <h2><b>Prince Patel</b></h2></p>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
