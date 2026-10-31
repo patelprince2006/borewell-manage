@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: water-supply-management-system
+    name: borewell
     runtime: node
     plan: free
     buildCommand: npm install
