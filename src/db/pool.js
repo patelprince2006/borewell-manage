@@ -10,15 +10,29 @@ const { Pool } = pg;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const connectionString = process.env.DATABASE_URL;
+
+const poolConfig = connectionString
+  ? {
+      connectionString,
+      ssl: connectionString.includes('localhost') || connectionString.includes('127.0.0.1')
+        ? false
+        : { rejectUnauthorized: false },
+    }
+  : {
+      host: process.env.PGHOST || 'localhost',
+      port: parseInt(process.env.PGPORT || '5432', 10),
+      user: process.env.PGUSER || 'postgres',
+      password: process.env.PGPASSWORD || 'prince2396',
+      database: process.env.PGDATABASE || 'borewell_water_db',
+      ssl: process.env.PGSSLMODE === 'require' ? { rejectUnauthorized: false } : false,
+    };
+
 export const pool = new Pool({
-  host: process.env.PGHOST || 'localhost',
-  port: parseInt(process.env.PGPORT || '5432', 10),
-  user: process.env.PGUSER || 'postgres',
-  password: process.env.PGPASSWORD || 'prince2396',
-  database: process.env.PGDATABASE || 'borewell_water_db',
+  ...poolConfig,
   max: 20,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 5000,
+  connectionTimeoutMillis: 10000,
 });
 
 export async function initDb() {

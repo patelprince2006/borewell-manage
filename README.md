@@ -107,5 +107,36 @@ http://localhost:3000
 
 ### 4. Run Automated Tests
 ```bash
-node tests/test_flow.js
+npm test
 ```
+
+---
+
+## 🌐 Deploy to Render
+
+### Option 1: Automatic Blueprint (Recommended)
+1. Go to [Render Dashboard](https://dashboard.render.com/) and click **New +** > **Blueprint**.
+2. Connect your GitHub repository: `https://github.com/patelprince2006/Water_supply_management_system`.
+3. Render will read `render.yaml` and automatically provision:
+   - A free PostgreSQL database (`water-supply-db`)
+   - The Node.js Web Service (`water-supply-management-system`)
+   - Wire the `DATABASE_URL` between them automatically.
+4. Click **Apply**. Within 2–3 minutes, your application will be live at `https://<your-service-name>.onrender.com`.
+
+### Option 2: Manual Setup
+1. **Create PostgreSQL Database on Render**:
+   - Go to [dashboard.render.com](https://dashboard.render.com/) -> **New +** -> **PostgreSQL**.
+   - Name: `water-supply-db`, Database: `borewell_water_db`, Plan: Free.
+   - Click **Create Database**.
+   - Copy the **Internal Database URL** (e.g., `postgres://...`).
+2. **Create Web Service on Render**:
+   - Go to **New +** -> **Web Service**.
+   - Connect repository: `patelprince2006/Water_supply_management_system`.
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+   - Plan: Free.
+   - In **Environment Variables**, add:
+     - `DATABASE_URL`: *(paste the Internal Database URL copied above)*
+     - `NODE_ENV`: `production`
+3. Click **Create Web Service**. Tables and initial seed data will be created automatically on first launch!
+

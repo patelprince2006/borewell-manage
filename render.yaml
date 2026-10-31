@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: water-supply-management-system
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: water-supply-db
+          property: connectionString
+      - key: NODE_ENV
+        value: production
+
+databases:
+  - name: water-supply-db
+    databaseName: borewell_water_db
+    user: borewell_user
+    plan: free
